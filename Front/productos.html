@@ -63,8 +63,8 @@
         }
 
         function cargarProductos() {
-            // fetch('http://127.0.0.1:8000/secproductos/producto')
-            fetch('/secproductos/producto')
+            fetch('http://127.0.0.1:8000/secproductos/producto')
+            //fetch('http:/api-container:8000/secproductos/producto')
                 .then(response => response.json())
                 .then(data => {
                     mostrarProductos(data);
