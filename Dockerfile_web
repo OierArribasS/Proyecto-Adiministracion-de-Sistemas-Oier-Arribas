@@ -1,0 +1,12 @@
+# Usa la imagen oficial de NGINX
+FROM nginx:latest
+
+# Copia la configuración de NGINX al contenedor
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Copia los archivos HTML al directorio de NGINX
+COPY ./Front/ /usr/share/nginx/html/
+
+# Exponer el puerto 80
+EXPOSE 80
+

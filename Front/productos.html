@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>Tu Tienda</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #141414; /* Color de fondo cuando no se cargan las partículas */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" onclick="cambiarPagina('productos.html')">Productos</a>
+        <a class="navbar-brand" onclick="cambiarPagina('index.html')">Inicio</a>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary" onclick="cargarProductos()">Listar productos</button>
+            </div>
+        </div>
+
+        <div id="listaProductos" class="row mt-3"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        cargarParticulas();
+        });
+
+        function cargarParticulas() {
+            // Incluye el archivo particles-config.js
+            const scriptParticlesConfig = document.createElement('script');
+            scriptParticlesConfig.src = 'particles-config.js';
+            document.head.appendChild(scriptParticlesConfig);
+        }
+
+
+
+        function cambiarPagina(pagina) {
+            window.location.href = pagina;
+        }
+
+        function cargarProductos() {
+            // fetch('http://127.0.0.1:8000/secproductos/producto')
+            fetch('/secproductos/producto')
+                .then(response => response.json())
+                .then(data => {
+                    mostrarProductos(data);
+                })
+                .catch(error => {
+                    console.error('Error al cargar productos:', error);
+                });
+        }
+
+        function mostrarProductos(productos) {
+            const listaProductos = document.getElementById('listaProductos');
+            listaProductos.innerHTML = '';
+
+            productos.forEach(producto => {
+                // Crear un contenedor para cada producto
+                const productoContainer = document.createElement('div');
+                productoContainer.classList.add('col-md-4', 'mb-4');
+
+                // Crear la tarjeta del producto usando Bootstrap
+                const tarjetaProducto = document.createElement('div');
+                tarjetaProducto.classList.add('card');
+
+                // Agregar imagen del producto
+                const imagenProducto = document.createElement('img');
+                imagenProducto.src = producto.imagen;
+                imagenProducto.classList.add('card-img-top');
+                tarjetaProducto.appendChild(imagenProducto);
+
+                // Crear el cuerpo de la tarjeta
+                const cuerpoTarjeta = document.createElement('div');
+                cuerpoTarjeta.classList.add('card-body');
+
+                // Agregar el nombre del producto
+                const nombreProducto = document.createElement('h5');
+                nombreProducto.classList.add('card-title');
+                nombreProducto.textContent = producto.nombre;
+                cuerpoTarjeta.appendChild(nombreProducto);
+
+                // Agregar el precio del producto
+                const precioProducto = document.createElement('p');
+                precioProducto.classList.add('card-text');
+                precioProducto.textContent = `Precio: ${producto.precio}`;
+                cuerpoTarjeta.appendChild(precioProducto);
+
+                // Agregar el cuerpo de la tarjeta al contenedor
+                tarjetaProducto.appendChild(cuerpoTarjeta);
+
+                // Agregar la tarjeta al contenedor de productos
+                productoContainer.appendChild(tarjetaProducto);
+
+                // Agregar el contenedor del producto a la lista de productos
+                listaProductos.appendChild(productoContainer);
+            });
+        }
+
+
+    </script>
+</body>
+
+</html>
